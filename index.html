@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>auth-test</title>
+</head>
+<body>
+    <h2>Add product</h2>
+    <form id="productSub" action="submit">
+        <input id="pr-name" type="text" placeholder="product name" required>
+        <input id="pr-price" type="number" placeholder="price" required>
+        <button type="submit">submit</button>
+    </form>
+</body>
+<script>
+    const form = document.getElementById('productSub')
+
+    form.addEventListener("submit", async e => {
+        e.preventDefault();
+
+        const name = document.getElementById("pr-name").value;
+        const price = document.getElementById("pr-price").value;
+
+        const response = await fetch('/api/products', {
+            method: 'POST',
+            headers: {'content-type': 'application/json'},
+            body: JSON.stringify({name, price})
+        })
+
+        const result = await response.json();
+        console.log("Server response :",result)
+        alert("Product added")
+    }) 
+</script>
+</html>
