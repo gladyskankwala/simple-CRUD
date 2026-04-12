@@ -8,10 +8,14 @@
 <body>
     <h2>Add product</h2>
     <form id="productSub" action="submit">
-        <input id="pr-name" type="text" placeholder="product name" required>
-        <input id="pr-price" type="number" placeholder="price" required>
+        <input id="pr-name" type="text" placeholder="Product name" required>
+        <input id="pr-quantity" type="number" placeholder="Quantity" required>
+        <input id="pr-price" type="number" placeholder="Price" required>
         <button type="submit">submit</button>
     </form>
+    <div id="container">
+        <h1>Loading...</h1>
+    </div>
 </body>
 <script>
     const form = document.getElementById('productSub')
@@ -20,17 +24,45 @@
         e.preventDefault();
 
         const name = document.getElementById("pr-name").value;
+        const quantity = document.getElementById("pr-quantity").value
         const price = document.getElementById("pr-price").value;
 
         const response = await fetch('/api/products', {
             method: 'POST',
             headers: {'content-type': 'application/json'},
-            body: JSON.stringify({name, price})
+            body: JSON.stringify({name, quantity, price})
         })
 
         const result = await response.json();
         console.log("Server response :",result)
         alert("Product added")
-    }) 
+    })
+
+    const displayProduct = async () =>  {
+      try {
+          const response = await fetch('/api/products')
+          const products = await response.json()
+
+          const container = document.getElementById('container');
+
+          container.innerHTML = '';
+
+          products.array.forEach(product => {
+            const productDiv = document.createElement('div')
+            productDiv.classList.add('')
+
+            productDiv.innerHTML = `
+                <h3>${product.name}</h3>
+                <h4> Quantity :${product.quantity}</h4>`
+          });
+          container.appendChild(productDiv)
+        
+      } catch (error) {
+        console.error("Error fetching products: ",error)
+        document.getElementById("container").innerHTML= "Failed to load products"
+      }
+    }
+
+    displayProduct()
 </script>
 </html>
