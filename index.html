@@ -47,15 +47,17 @@
 
           container.innerHTML = '';
 
-          products.array.forEach(product => {
+          products.forEach(product => {
             const productDiv = document.createElement('div')
-            productDiv.classList.add('')
+            productDiv.classList.add('product-item')
 
             productDiv.innerHTML = `
                 <h3>${product.name}</h3>
                 <h4> Quantity :${product.quantity}</h4>`
+
+             container.appendChild(productDiv)
           });
-          container.appendChild(productDiv)
+         
         
       } catch (error) {
         console.error("Error fetching products: ",error)
