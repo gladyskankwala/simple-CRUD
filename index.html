@@ -4,6 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>auth-test</title>
+    <style>   
+        #container {
+            width: 100%;
+            background-color: aqua;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 80px;
+        }
+    </style>
 </head>
 <body>
     <h2>Add product</h2>
@@ -51,17 +61,19 @@
                 body: JSON.stringify({quantity: Number(newQuantity)})
             })
 
+            //check if response is json
+            const result = await response.json();
+
             if (response.ok) {
                 alert("Product updated")
                 displayProduct()
             } else {
-                const error = response.json()
-                alert("Error :" + error.message)
+                
+                alert("Error :" + (result.message || response.statusText))
             }
             
         } catch (error) {
             console.error("update failed:", error)
-            
         }
     }
 
@@ -81,11 +93,11 @@
             productDiv.innerHTML = `
                 <h3>${product.name}</h3>
                 <p> Quantity : <strong>${product.quantity}</strong><p>
-                <p> Price :${product.price} </p>
+                <p> Price :${product.price}$</p>
 
-                <button onclick="updateProductQuantit('${product._id}', ${product.quantity})">
+                <button onclick="updateProductQuantity('${product._id}', ${product.quantity})">
                     Edit the quantity
-                <button/>
+                </button>
                 `
 
              container.appendChild(productDiv)
