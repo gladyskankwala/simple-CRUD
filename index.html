@@ -30,13 +30,40 @@
         const response = await fetch('/api/products', {
             method: 'POST',
             headers: {'content-type': 'application/json'},
-            body: JSON.stringify({name, quantity, price})
+            body: JSON.stringify({name, quantity: Number(quantity), price: Number(price)})
         })
 
         const result = await response.json();
         console.log("Server response :",result)
         alert("Product added")
     })
+
+    const updateProductQuantity = async (productId, currentQuant) =>{
+
+        const newQuantity = prompt("Enter New quantity:", currentQuant)
+
+        if (newQuantity == null || newQuantity == currentQuant) return;
+
+        try {
+            const response = await fetch (`/api/products/${productId}`, {
+                method: "PUT",
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({quantity: Number(newQuantity)})
+            })
+
+            if (response.ok) {
+                alert("Product updated")
+                displayProduct()
+            } else {
+                const error = response.json()
+                alert("Error :" + error.message)
+            }
+            
+        } catch (error) {
+            console.error("update failed:", error)
+            
+        }
+    }
 
     const displayProduct = async () =>  {
       try {
@@ -53,7 +80,13 @@
 
             productDiv.innerHTML = `
                 <h3>${product.name}</h3>
-                <h4> Quantity :${product.quantity}</h4>`
+                <p> Quantity : <strong>${product.quantity}</strong><p>
+                <p> Price :${product.price} </p>
+
+                <button onclick="updateProductQuantit('${product._id}', ${product.quantity})">
+                    Edit the quantity
+                <button/>
+                `
 
              container.appendChild(productDiv)
           });
