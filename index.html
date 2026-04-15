@@ -77,6 +77,22 @@
         }
     }
 
+
+    const deleteProduct = async (productId) => {
+        try {
+            const response = await fetch(`/api/products/${productId}`)
+            const result = await response.json();
+
+            if (result.ok) {
+                alert("Product deleted successfully!")
+                displayProduct()
+            }
+
+        } catch (error) {
+            alert("Error occurs", error)
+        }
+    }
+
     const displayProduct = async () =>  {
       try {
           const response = await fetch('/api/products')
@@ -98,11 +114,13 @@
                 <button onclick="updateProductQuantity('${product._id}', ${product.quantity})">
                     Edit the quantity
                 </button>
+                <button onclick="deleteProduct('${product._id}')">
+                    Delete the product
+                </button>
                 `
 
              container.appendChild(productDiv)
           });
-         
         
       } catch (error) {
         console.error("Error fetching products: ",error)
