@@ -51,7 +51,7 @@ app.delete('api/products/:id', async (req, res) => {
     try {
         const {id} = req.params;
 
-        const product = await Products.findByIdAndUpdate(id)
+        const product = await Products.findByIdAndDelete(id)
 
         if (!product) {
             return res.status(404).json({message: "Produit not found"})
